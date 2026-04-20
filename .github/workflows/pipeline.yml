@@ -37,7 +37,7 @@ jobs:
         run: docker rm dockflow-ci || true
 
       - name: run new container
-        run: docker run -d -p 8081:80 --name dockflow-ci  ${{ secrets.DOCKER_USERNAME }}/dockflow-ci:latest
+        run: docker run -d -p 8081:3000 --name dockflow-ci  ${{ secrets.DOCKER_USERNAME }}/dockflow-ci:latest
 
     
 
