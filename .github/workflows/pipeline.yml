@@ -4,7 +4,7 @@ on:
    branches:
      - main
 jobs:
-  build_docker_image:
+  build_and_deploy:
     runs-on: ubuntu-latest
     steps:
       - name: checkout code
@@ -22,17 +22,22 @@ jobs:
       - name: Push Docker image
         run: docker push  ${{ secrets.DOCKER_USERNAME }}/dockflow-ci:latest  
 
-      - name: Deploy to Azure VM
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          script: | 
-            docker pull ${{ secrets.DOCKER_USERNAME }}/dockflow-ci:latest
-            docker stop dockflow-ci || true
-            docker rm dockflow-ci || true
-            docker run -d -p 80:80 --name dockflow-ci ${{ secrets.DOCKER_USERNAME }}/dockflow-ci:latest
+  deploy:
+    needs: build_and_deploy
+    runs-on: self-hosted
+
+    steps:
+      - name: Pull latest image
+        run: docker pull  ${{ secrets.DOCKER_USERNAME }}/dockflow-ci:latest
+
+      - name: Stop old container
+        run: docker stop dockflow-ci || true
+
+      - name: Remove old container
+        run: docker rm dockflow-ci || true
+
+      - name: run new container
+        run: docker run -d -p 80:80 --name dockflow-ci  ${{ secrets.DOCKER_USERNAME }}/dockflow-ci:latest
 
     
 
