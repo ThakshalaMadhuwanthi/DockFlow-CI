@@ -2,7 +2,9 @@ const http = require('http');
 
 const server = http.createServer((req, res) => {
   
-  res.writeHead(200, { 'Content-Type': 'text/html' });
+  res.writeHead(200, { 
+    'Content-Type': 'text/html; charset=utf-8'  
+  });
 
   res.end(`
     <!DOCTYPE html>
@@ -12,18 +14,19 @@ const server = http.createServer((req, res) => {
       <style>
         body {
           font-family: Arial, sans-serif;
-          background: linear-gradient(135deg, #1e3c72, #2a5298);
+          background-color: #000000; /* 🖤 black background */
           color: white;
           text-align: center;
           padding-top: 100px;
+          margin: 0;
         }
 
         .card {
-          background: rgba(255,255,255,0.1);
+          background-color: #1e90ff; /* 🔵 blue box */
           padding: 30px;
           border-radius: 15px;
           display: inline-block;
-          box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+          box-shadow: 0 10px 20px rgba(0,0,0,0.5);
         }
 
         button {
@@ -36,11 +39,17 @@ const server = http.createServer((req, res) => {
         }
 
         button:hover {
-          background: #00c6ff;
-          color: white;
+          background-color: #ffffff;
+          color: #1e90ff;
+        }
+
+        #msg {
+          margin-top: 15px;
+          font-size: 18px;
         }
       </style>
     </head>
+
     <body>
       <div class="card">
         <h1>🚀 DevOps Pipeline Running</h1>
